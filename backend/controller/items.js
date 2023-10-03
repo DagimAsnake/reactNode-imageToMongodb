@@ -37,3 +37,25 @@ module.exports.getPost = (req, res) => {
       .catch((err) => {
       });
   };
+
+  module.exports.updatePost = (req, res) => {
+    const postId = req.params.postId;
+  
+    const title = req.body.title;
+    const image = req.body.image;
+   
+    Item.findById(postId)
+      .then((post) => {
+        if (!post) {
+          console.log("could not find a post");
+        }
+        post.title = title;
+        post.image = image;
+        return post.save();
+      })
+      .then((result) => {
+        res.status(200).json({ message: "Post updated!", post: result });
+      })
+      .catch((err) => {
+      });
+  };

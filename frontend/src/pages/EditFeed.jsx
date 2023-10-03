@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import FileBase64 from 'react-file-base64';
 
 function EditFeed() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ function EditFeed() {
 
   useEffect(() => {
     const addreport = async () => {
-      const response = await fetch(`http://localhost:8080/feed/post/${id}`);
+      const response = await fetch(`http://localhost:8080/feed/get/${id}`);
 
       if (!response.ok) {
         console.log("something is wrong");
@@ -20,8 +21,8 @@ function EditFeed() {
 
       const data = await response.json();
       console.log(data);
-      setTitle(data.post.title);
-      setImage(data.post.imageUrl);
+      setTitle(data.title);
+      setImage(data.image);
       setIsLoading(false);
     };
 
@@ -31,14 +32,17 @@ function EditFeed() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("image", image);
+    const newData = {
+      title: title,
+      image: image
+    }
 
     const addreport = async () => {
       const response = await fetch(`http://localhost:8080/feed/post/${id}`, {
-        method: "PUT",
-        body: formData,
+        method: "PUT",  headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newData)
       });
       console.log(response);
       if (!response.ok) {
@@ -73,12 +77,14 @@ function EditFeed() {
 
           <div>
             <h4>Image</h4>
-            <input
-              type="file"
-              name="image"
-              //   value={image}
-              onChange={(e) => setImage(e.target.files[0])}
-            />
+            <FileBase64
+            type="file"
+            multiple={false}
+            onDone={({ base64 }) => setImage(base64)}
+          />
+          </div>
+          <div>
+          <img src={image} alt="" />
           </div>
           <div>
             <button>Submit</button>

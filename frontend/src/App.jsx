@@ -13,7 +13,7 @@ const App = () => {
         <Route path="/" element={<Feeds />} />
         <Route path="/input" element={<InputFeeds />} />
         <Route path="/view/:id" element={<View />} />
-        {/* <Route path="/edit/:id" element={<EditFeed />} /> */}
+        <Route path="/edit/:id" element={<EditFeed />} />
         {/* <Route path="/delete/:id" element={<DeleteFeed />} /> */}
       </Routes>
     </Router>
