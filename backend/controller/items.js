@@ -59,3 +59,22 @@ module.exports.getPost = (req, res) => {
       .catch((err) => {
       });
   };
+
+
+  module.exports.deletePost = (req, res) => {
+    const postId = req.params.postId;
+    Item.findById(postId)
+      .then((post) => {
+        console.log(post);
+        if (!post) {
+          console.log("couldnot Find a post");
+        }
+        return Item.findByIdAndRemove(postId);
+      })
+      .then((result) => {
+        console.log(result);
+        res.status(200).json({ message: "Deleted post." });
+      })
+      .catch((err) => {
+      });
+  };
