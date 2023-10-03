@@ -21,3 +21,19 @@ module.exports.createItem = async(req,res)=>{
         
     }
 }
+
+
+module.exports.getPost = (req, res) => {
+    const postId = req.params.postId;
+    Item.findById(postId)
+      .then((post) => {
+        if (!post) {
+          const error = new Error("Could not find post.");
+          error.statusCode = 404;
+          throw error;
+        }
+        res.status(200).json(post);
+      })
+      .catch((err) => {
+      });
+  };
